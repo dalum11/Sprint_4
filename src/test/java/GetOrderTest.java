@@ -12,6 +12,7 @@ import pageobject.UserInfoPage;
 
 import java.util.Arrays;
 
+//Основной тестовый класс
 @RunWith(Parameterized.class)
 public class GetOrderTest {
 
