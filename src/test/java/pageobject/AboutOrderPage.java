@@ -7,7 +7,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class AboutOrderPage {
 
-    //Драйвер браузера
+    //Драйвер браузерa
     private WebDriver driver;
 
     //Дата, когда привезут самокат
