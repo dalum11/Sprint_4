@@ -90,7 +90,8 @@ public class GetOrderTest {
         aboutOrderPage.fillAboutOrderPage(date, rentalPeriod, comment);
         aboutOrderPage.clickOnOrderButton();
         aboutOrderPage.clickOnConfirmOrderButton();
-        aboutOrderPage.checkOrder();
+        boolean actual = aboutOrderPage.checkOrder();
+        Assert.assertTrue("Нет окна с информацией о том, что заказ создан", actual);
     }
 
     @Test
