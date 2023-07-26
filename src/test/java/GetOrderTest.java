@@ -1,4 +1,5 @@
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -60,8 +61,8 @@ public class GetOrderTest {
         );
     }
 
-    @Test
-    public void getOrderByHeaderButton() {
+    @Before
+    public void startPageInitialize() {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--no-sandbox", "--headless", "--disable-dev-shm-usage", "--remote-allow-origins=*");
         System.setProperty("webdriver.chrome.driver", "C:\\Users\\dalum\\Downloads\\chromedriver_win32\\chromedriver.exe");
@@ -69,11 +70,10 @@ public class GetOrderTest {
         driver = new ChromeDriver(options);
         String url = "https://qa-scooter.praktikum-services.ru/";
         driver.get(url);
+    }
 
-        HomePage homePage = new HomePage(driver);
-        homePage.wailForLoadingHomePage();
-        homePage.clickOnOrderButtonInHeader();
 
+    public void insertInfoInPages(){
         driver.get("https://qa-scooter.praktikum-services.ru/order");
         UserInfoPage orderPage = new UserInfoPage(driver);
         orderPage.wailForLoadingOrderPage();
@@ -88,30 +88,24 @@ public class GetOrderTest {
     }
 
     @Test
-    public void getOrderByMiddleButton() {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--no-sandbox", "--headless", "--disable-dev-shm-usage", "--remote-allow-origins=*");
-        System.setProperty("webdriver.chrome.driver", "C:\\Users\\dalum\\Downloads\\chromedriver_win32\\chromedriver.exe");
+    public void getOrderByHeaderButton() {
 
-        driver = new ChromeDriver(options);
-        String url = "https://qa-scooter.praktikum-services.ru/";
-        driver.get(url);
+        startPageInitialize();
+        HomePage homePage = new HomePage(driver);
+        homePage.wailForLoadingHomePage();
+        homePage.clickOnOrderButtonInHeader();
+
+        insertInfoInPages();
+    }
+
+    @Test
+    public void getOrderByMiddleButton() {
 
         HomePage homePage = new HomePage(driver);
         homePage.wailForLoadingHomePage();
         homePage.clickOnOrderButtonInMiddle();
 
-        driver.get("https://qa-scooter.praktikum-services.ru/order");
-        UserInfoPage orderPage = new UserInfoPage(driver);
-        orderPage.wailForLoadingOrderPage();
-        orderPage.clickOnAcceptCookieButton();
-        orderPage.fillFieldsInPage(username, userSurname, address, phoneNumber, metroStation);
-        orderPage.clickOnFarther();
-        AboutOrderPage aboutOrderPage = new AboutOrderPage(driver);
-        aboutOrderPage.waitForDownloadingPage();
-        aboutOrderPage.fillAboutOrderPage(date, rentalPeriod, comment);
-        aboutOrderPage.clickOnOrderButton();
-        aboutOrderPage.clickOnConfirmOrderButton();
+        insertInfoInPages();
     }
 
     @After
