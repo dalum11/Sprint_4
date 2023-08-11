@@ -1,5 +1,4 @@
-import org.junit.After;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.By;
@@ -12,10 +11,11 @@ import pageobject.UserInfoPage;
 
 import java.util.Arrays;
 
+//Основной тестовый класс
 @RunWith(Parameterized.class)
 public class GetOrderTest {
 
-    private WebDriver driver;
+    private static WebDriver driver;
     private String username;
     private String userSurname;
     private String address;
@@ -59,62 +59,63 @@ public class GetOrderTest {
         );
     }
 
-    @Test
-    public void getOrderByHeaderButton() {
+    @BeforeClass
+    public static void startPageInitialize() {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--no-sandbox", "--headless", "--disable-dev-shm-usage", "--remote-allow-origins=*");
         System.setProperty("webdriver.chrome.driver", "C:\\Users\\dalum\\Downloads\\chromedriver_win32\\chromedriver.exe");
 
         driver = new ChromeDriver(options);
+    }
+
+    @Before
+    public void openHomePage() {
         String url = "https://qa-scooter.praktikum-services.ru/";
         driver.get(url);
+    }
 
+
+    public void insertInfoInUserInfoPage(){
+        driver.get("https://qa-scooter.praktikum-services.ru/order");
+        UserInfoPage userInfoPage = new UserInfoPage(driver);
+        userInfoPage.wailForLoadingOrderPage();
+        userInfoPage.clickOnAcceptCookieButton();
+        userInfoPage.fillFieldsInPage(username, userSurname, address, phoneNumber, metroStation);
+        userInfoPage.clickOnFarther();
+    }
+
+    public void insertInfoInOrderPage() {
+        AboutOrderPage aboutOrderPage = new AboutOrderPage(driver);
+        aboutOrderPage.waitForDownloadingPage();
+        aboutOrderPage.fillAboutOrderPage(date, rentalPeriod, comment);
+        aboutOrderPage.clickOnOrderButton();
+        aboutOrderPage.clickOnConfirmOrderButton();
+        boolean actual = aboutOrderPage.checkOrder();
+        Assert.assertTrue("Нет окна с информацией о том, что заказ создан", actual);
+    }
+
+    @Test
+    public void getOrderByHeaderButton() {
         HomePage homePage = new HomePage(driver);
         homePage.wailForLoadingHomePage();
         homePage.clickOnOrderButtonInHeader();
 
-        driver.get("https://qa-scooter.praktikum-services.ru/order");
-        UserInfoPage orderPage = new UserInfoPage(driver);
-        orderPage.wailForLoadingOrderPage();
-        orderPage.clickOnAcceptCookieButton();
-        orderPage.fillFieldsInPage(username, userSurname, address, phoneNumber, metroStation);
-        orderPage.clickOnFarther();
-        AboutOrderPage aboutOrderPage = new AboutOrderPage(driver);
-        aboutOrderPage.waitForDownloadingPage();
-        aboutOrderPage.fillAboutOrderPage(date, rentalPeriod, comment);
-        aboutOrderPage.clickOnOrderButton();
-        aboutOrderPage.clickOnConfirmOrderButton();
+        insertInfoInUserInfoPage();
+        insertInfoInOrderPage();
     }
 
     @Test
     public void getOrderByMiddleButton() {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--no-sandbox", "--headless", "--disable-dev-shm-usage", "--remote-allow-origins=*");
-        System.setProperty("webdriver.chrome.driver", "C:\\Users\\dalum\\Downloads\\chromedriver_win32\\chromedriver.exe");
-
-        driver = new ChromeDriver(options);
-        String url = "https://qa-scooter.praktikum-services.ru/";
-        driver.get(url);
-
         HomePage homePage = new HomePage(driver);
         homePage.wailForLoadingHomePage();
         homePage.clickOnOrderButtonInMiddle();
 
-        driver.get("https://qa-scooter.praktikum-services.ru/order");
-        UserInfoPage orderPage = new UserInfoPage(driver);
-        orderPage.wailForLoadingOrderPage();
-        orderPage.clickOnAcceptCookieButton();
-        orderPage.fillFieldsInPage(username, userSurname, address, phoneNumber, metroStation);
-        orderPage.clickOnFarther();
-        AboutOrderPage aboutOrderPage = new AboutOrderPage(driver);
-        aboutOrderPage.waitForDownloadingPage();
-        aboutOrderPage.fillAboutOrderPage(date, rentalPeriod, comment);
-        aboutOrderPage.clickOnOrderButton();
-        aboutOrderPage.clickOnConfirmOrderButton();
+        insertInfoInUserInfoPage();
+        insertInfoInOrderPage();
     }
 
-    @After
-    public void teardown(){
+    @AfterClass
+    public static void teardown(){
         driver.quit();
     }
 

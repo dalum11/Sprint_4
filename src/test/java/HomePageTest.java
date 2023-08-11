@@ -11,6 +11,7 @@ import pageobject.HomePage;
 
 import java.util.Arrays;
 
+//Тест для выпадающего списка
 @RunWith(Parameterized.class)
 public class HomePageTest {
 

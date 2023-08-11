@@ -25,6 +25,9 @@ public class AboutOrderPage {
     //Кнопка подтверждения заказа
     private static final By CONFIRM_ORDER = By.xpath("//div[5]/div[2]/button[2]");
 
+    //Всплывающее окно с информацией о том, что заказ создан
+    private static final By POP_UP_AFTER_CONFIRM_ORDER = By.className("Order_Modal__YZ-d3");
+
     public AboutOrderPage(WebDriver driver) {
         this.driver = driver;
     }
@@ -74,5 +77,9 @@ public class AboutOrderPage {
         fillDate(date);
         fillRentalPeriod(rentalPeriod);
         fillCommentForCourier(comment);
+    }
+
+    public boolean checkOrder() {
+        return driver.findElement(POP_UP_AFTER_CONFIRM_ORDER).isDisplayed();
     }
 }

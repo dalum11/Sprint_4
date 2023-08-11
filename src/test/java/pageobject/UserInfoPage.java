@@ -1,11 +1,10 @@
 package pageobject;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+//Страница информации о пользователе
 public class UserInfoPage {
 
     //Драйвер браузера
@@ -38,7 +37,15 @@ public class UserInfoPage {
 
     //Принимает куки по кнопке
     public void clickOnAcceptCookieButton(){
-        driver.findElement(ACCEPT_COOKIE_BUTTON).click();
+        WebElement acceptCookieButton = null;
+        try {
+            acceptCookieButton = driver.findElement(ACCEPT_COOKIE_BUTTON);
+        } catch (NoSuchElementException e) {
+            System.out.println("Кнопка не найдена");
+        }
+        if (acceptCookieButton != null) {
+            acceptCookieButton.click();
+        }
     }
 
     //Ждёт загрузку страницы
